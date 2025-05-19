@@ -27,11 +27,15 @@ export const loginUser = TryCatch(async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        res.status(404).json({ message: "Invalid Credential" });
+        res.status(400).json({ message: "Invalid Credential" });
         return;
     }
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
     });
     res.status(200).json({ message: "User Login successfully", user, token });
+});
+export const myProfile = TryCatch(async (req, res) => {
+    const user = req.user;
+    res.json(user);
 });
